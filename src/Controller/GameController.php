@@ -8,10 +8,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class GameController extends AbstractController
 {
     /**
-     * @Route("/game", name="game")
+     * @Route("/game/{id}", name="game")
      */
-    public function index()
+    public function game()
     {
+        //get user
+        //check if user is in game
+        //get status
+
+
+
         return $this->render('game/index.html.twig', [
             'controller_name' => 'GameController',
         ]);
@@ -20,4 +26,17 @@ class GameController extends AbstractController
     /**
      * @Route("/lobby", name="game_lobby")
      */
+     public function lobby()
+     {
+       //get user
+     }
+
+     /**
+      * @Route("/guess", name="guess")
+
+      * @param Request $request
+      */
+     public function guess($request) {
+       
+     }
 }
