@@ -38,7 +38,7 @@ class GameController extends AbstractController
           return $this->redirectToRoute('game_lobby');
         }
       } else {
-        return $this->redirectToRoute('login');
+        return $this->redirectToRoute('app_login');
       }
 
       $userTurn = $gameManager->isUserTurn($user, $game);
@@ -48,6 +48,7 @@ class GameController extends AbstractController
 
       return $this->render('game/index.html.twig', [
           'game'     => $game,
+          'user'     => $user,
           'form'     => $form->createView(),
           'userTurn' => $userTurn
       ]);
@@ -65,7 +66,7 @@ class GameController extends AbstractController
         if ($user = $this->getUser()) {
             $games = $gameManager->getGamesForUser($user, true);
         } else {
-            return $this->redirectToRoute('login');
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('game/lobby.html.twig', [
@@ -130,14 +131,20 @@ class GameController extends AbstractController
         if ($user = $this->getUser()) {     
             if ($gameManager->userInGame($user, $game)) {
 
-                $turn = $gameManager->isUserTurn();
+                $turn = $gameManager->isUserTurn($user, $game);
 
                 //build data for json output
                 $outputData = [];
-                $outputData['turn'] = $turn;
+                $outputData['turn']   = $turn;
+                if ($game->getActive()) {
+                    $outputData['active'] = 'true';
+                } else {
+                    $outputData['active'] = 'false';
+                    $outputData['winner'] = $game->getWinner()->getId() === $user->getId() ? true : false;
+                }
             }
         }
         
-        return new JsonResponse($test);
+        return new JsonResponse($outputData);
     }
 }

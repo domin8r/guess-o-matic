@@ -7,6 +7,7 @@
 
 </style>
 	<div class="game">
+		<h1>Welcome {{ user.name }}</h1>
 		<section class="guesses">
 			<h2>Guesses</h2>
 		 	{% for guess in game.guesses %}
@@ -15,8 +16,8 @@
 		</section>
 		<section class="users">
 			<h2>Players</h2>
-			{% for user in game.users %}
-			<span>{{ user.name }}</span>
+			{% for game_user in game.users %}
+			<span>{{ game_user.name }}</span>
 			{% endfor %}
 		</section>
 		<section class="form">
@@ -47,7 +48,24 @@ $(document).ready(function(){
 		});
 	});
 
-	
+	//set polling
+	var pollInterval;
+
+	$.fn.startPolling = function() {
+		pollInterval = setInterval($.fn.handlePolling, 5000);
+	}
+	$.fn.stopPolling = function() {
+		clearInterval(pollInterval);
+	}
+	$.fn.handlePolling = function() {
+		var gameId = $('#guess_game').val();
+		$.post( "/poll", { game: gameId}).done(function(data) {
+			var pollResult = data.result;
+			console.log(pollResult.turn);
+		});
+	}
+
+	$.fn.startPolling();
 });
 </script>
 {% endblock %}

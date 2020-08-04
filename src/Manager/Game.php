@@ -81,6 +81,11 @@ class Game
 
         if ($value === $game->getValue()) {
             $result = self::CORRECT;
+
+            $game->setActive(false);
+            $game->setWinner($user);
+            $this->em->persist($game);
+            $this->em->flush();            
         } elseif ($value > $game->getValue()) {
             $result = self::LOWER;
         } else {

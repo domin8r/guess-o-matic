@@ -39,6 +39,11 @@ class Game
      */
     private $value;
 
+    /**
+     * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"})
+     */
+    private $winner;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -127,6 +132,18 @@ class Game
     public function setValue(int $value): self
     {
         $this->value = $value;
+
+        return $this;
+    }
+
+    public function getWinner(): ?User
+    {
+        return $this->winner;
+    }
+
+    public function setWinner(?User $winner): self
+    {
+        $this->winner = $winner;
 
         return $this;
     }
