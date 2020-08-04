@@ -129,4 +129,20 @@ class Game
 
         return false;
     }
+
+    /**
+      * @param UserEntity[] $users
+      *
+      * @return bool
+      */
+    public function newGame(array $users)
+    {
+        $game = new GameEntity();
+        $game->setUsers($users);
+        $game->setActive(true);
+        $game->setValue(rand ( 1 , 100 ));
+
+        $this->em->persist($game);
+        $this->em->flush();
+    }
 }
