@@ -40,11 +40,44 @@ class Game
 
     /**
       * @param UserEntity $user
+      * @param GameEntity $game
+      *
+      * @return bool
+    */ 
+    public function userInGame(UserEntity $user, GameEntity $game)
+    {
+      $users = $game->getUsers();
+      foreach ($users as $gameUser) {
+        if ($user->getId() === $gameUser->getId()) {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    /**
+      * @param UserEntity $user
       * @param int $value
       *
       */
     public function storeGuess(UserEntity $user, int $value)
     {
-        
+
+    }
+
+    /**
+      * @param UserEntity $user
+      * @param bool       $active
+      *
+      * @return GameEntity[]
+    */  
+    public function getGamesForUser(UserEntity $user, $active = true)
+    {
+      $games = $this->em
+          ->getRepository(GameEntity::class)
+          ->getGamesForUser($user, $active);
+
+      return $games;
     }
 }

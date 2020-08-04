@@ -1,20 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello GameController!{% endblock %}
+{% block title %}Game!{% endblock %}
 
 {% block body %}
 <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+
 </style>
+	<div class="game">
+		<section class="guesses">
+			<h2>Guesses</h2>
+		 	{% for guess in game.guesses %}
+		 	<span>{{ guess.value }} by {{ guess.user.name }}</span>
+		 	{% endfor %}
+		</section>
+		<section class="users">
+			<h2>Players</h2>
+			{% for user in game.users %}
+			<span>{{ user.name }}</span>
+			{% endfor %}
+		</section>
+	</div>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/srv/sites/guess-o-matic/src/Controller/GameController.php'|file_link(0) }}">src/Controller/GameController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/srv/sites/guess-o-matic/templates/game/index.html.twig'|file_link(0) }}">templates/game/index.html.twig</a></code></li>
-    </ul>
-</div>
 {% endblock %}

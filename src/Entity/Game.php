@@ -34,6 +34,11 @@ class Game
      */
     private $guesses;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $value;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -110,6 +115,18 @@ class Game
                 $guess->setGame(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getValue(): ?int
+    {
+        return $this->value;
+    }
+
+    public function setValue(int $value): self
+    {
+        $this->value = $value;
 
         return $this;
     }
