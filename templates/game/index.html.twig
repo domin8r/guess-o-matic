@@ -19,6 +19,35 @@
 			<span>{{ user.name }}</span>
 			{% endfor %}
 		</section>
+		<section class="form">
+			{{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+		</section>
 	</div>
 
+{% endblock %}
+
+{% block javascripts %}
+<script>
+$(document).ready(function(){
+	$('#guess_save').click(function(e){
+		e.preventDefault();
+
+		var guess  = $('#guess_number').val();
+		var gameId = $('#guess_game').val();
+
+		if (guess.length == 0) {
+			//handle this error
+		}
+		
+		$.post( "/guess", { guess: guess, game: gameId}).done(function(data) {
+			var result = data.result;
+			alert(result);
+		});
+	});
+
+	
+});
+</script>
 {% endblock %}

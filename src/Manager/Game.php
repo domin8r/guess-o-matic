@@ -9,9 +9,13 @@ use App\Entity\Game as GameEntity;
 use App\Entity\Guess as GuessEntity;
 
 class Game
-{
+{    
     /** @var EntityManager */
     protected $em;
+
+    public const CORRECT = 'correct';
+    public const LOWER   = 'lower';
+    public const HIGHER  = 'higher';
 
     /**
      * Constructor
@@ -58,12 +62,32 @@ class Game
 
     /**
       * @param UserEntity $user
+      * @param GameEntity $game
       * @param int $value
       *
+      * @return string
       */
-    public function storeGuess(UserEntity $user, int $value)
+    public function submitGuess(UserEntity $user, GameEntity $game, int $value)
     {
+        $guess = new GuessEntity();
+        $guess
+            ->setUser($user)
+            ->setGame($game)
+            ->setValue($value)
+            ->setInsertedOn(new \DateTime());
 
+        $this->em->persist($guess);
+        $this->em->flush();
+
+        if ($value === $game->getValue()) {
+            $result = self::CORRECT;
+        } elseif ($value > $game->getValue()) {
+            $result = self::LOWER;
+        } else {
+            $result = self::HIGHER;
+        }
+
+        return $result;
     }
 
     /**
@@ -79,5 +103,25 @@ class Game
           ->getGamesForUser($user, $active);
 
       return $games;
+    }
+
+    /**
+      * @param UserEntity $user
+      * @param GameEntity $game
+      *
+      * @return bool
+      */
+    public function isUserTurn(UserEntity $user, GameEntity $game)
+    {
+        $guessAmount  = count($game->getGuesses());        
+        $players      = $game->getUsers();
+        $activePlayer = $players[$guessAmount % count($players)];
+        
+        if ($activePlayer->getId() === $user->getId())
+        {
+          return true;
+        }
+
+        return false;
     }
 }
