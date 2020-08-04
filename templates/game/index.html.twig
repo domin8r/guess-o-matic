@@ -4,28 +4,44 @@
 
 {% block body %}
 <style>
+	.game {
+		display: flex;
+		flex-direction: row;
+	}
 
+	section.guesses {
+		width: 20%;
+		display: flex;
+		flex-direction: column;
+	}
+	section.form {
+		margin-top: 40px;
+	}
+	section {
+		margin: 10px;
+	}
 </style>
-	<div class="game">
-		<h1>Welcome {{ user.name }}</h1>
-		<section class="guesses">
-			<h2>Guesses</h2>
-		 	{% for guess in game.guesses %}
-		 	<span>{{ guess.value }} by {{ guess.user.name }}</span>
-		 	{% endfor %}
-		</section>
-		<section class="users">
-			<h2>Players</h2>
-			{% for game_user in game.users %}
-			<span>{{ game_user.name }}</span>
-			{% endfor %}
-		</section>
-		<section class="form">
-			{{ form_start(form) }}
-            {{ form_widget(form) }}
-            {{ form_end(form) }}
-		</section>
-	</div>
+
+<div class="game">
+	<h1>Welcome {{ user.name }}</h1>
+	<section class="guesses">
+		<h2>Guesses</h2>
+	 	{% for guess in game.guesses %}
+	 	<span>{{ guess.value }} by {{ guess.user.name }}</span>
+	 	{% endfor %}
+	</section>
+	<section class="users">
+		<h2>Players</h2>
+		{% for game_user in game.users %}
+		<span>{{ game_user.name }}</span>
+		{% endfor %}
+	</section>
+	<section class="form">
+		{{ form_start(form) }}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
+	</section>
+</div>
 
 {% endblock %}
 
@@ -47,25 +63,6 @@ $(document).ready(function(){
 			alert(result);
 		});
 	});
-
-	//set polling
-	var pollInterval;
-
-	$.fn.startPolling = function() {
-		pollInterval = setInterval($.fn.handlePolling, 5000);
-	}
-	$.fn.stopPolling = function() {
-		clearInterval(pollInterval);
-	}
-	$.fn.handlePolling = function() {
-		var gameId = $('#guess_game').val();
-		$.post( "/poll", { game: gameId}).done(function(data) {
-			var pollResult = data.result;
-			console.log(pollResult.turn);
-		});
-	}
-
-	$.fn.startPolling();
 });
 </script>
 {% endblock %}

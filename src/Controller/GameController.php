@@ -98,8 +98,7 @@ class GameController extends AbstractController
         }
 
         if ($user = $this->getUser()) {     
-            //todo: && $gameManager->isUserTurn($user, $game)
-            if ($gameManager->userInGame($user, $game) ) {
+            if ($gameManager->userInGame($user, $game) && $gameManager->isUserTurn($user, $game)) {
                 
                 $guessResult = $gameManager->submitGuess($user, $game, $guessValue);
 
